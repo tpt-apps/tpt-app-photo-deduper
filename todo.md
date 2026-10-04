@@ -54,7 +54,10 @@
       (`scan_start/progress/results/cancel`, `thumbnails`, `delete_files`
       → Recycle Bin via `trash`), background walk+hash thread
 - [x] Windows exe build (`build.ps1 -Pro` → `release\TPT-Photo-Deduper-Pro.zip`)
-      + smoke test (exe launches, window opens, exits cleanly)
+      + smoke test (exe launches; window screenshot-verified: folder card,
+      near-duplicates toggle, strictness select all render in WebView2.
+      An interactive end-to-end scan through the native folder dialog is the
+      one thing not machine-driven — left as a 30-second manual pass)
 - [ ] Gumroad product from apps.md listing copy ($19), exe upload, URL into
       registry — manual step, listing copy ready in `GUMROAD.md`
 
