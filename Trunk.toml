@@ -1,0 +1,8 @@
+# Trunk config for the standalone/desktop bundle.
+# wasm-opt is disabled via data-wasm-opt="0" on the <link data-trunk> tag in
+# index.html (trunk 0.21 ignores [tools] wasm-opt = false): the modern Rust
+# wasm target emits bulk-memory opcodes that the cached Binaryen rejects, and
+# the release profile (opt-level = "z", lto, strip) already keeps the payload
+# small.
+[tools]
+wasm-opt = false

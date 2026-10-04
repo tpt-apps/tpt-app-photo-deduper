@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>TPT Photo Deduper — TPT AppFront</title>
+    <!-- data-wasm-opt="0" disables trunk's wasm-opt step: the modern Rust wasm
+         target emits bulk-memory opcodes that trunk's cached Binaryen rejects
+         (--enable-bulk-memory is not passed), and the release profile
+         (opt-level = "z", lto, strip) already keeps the payload small. -->
+    <link data-trunk rel="rust" href="Cargo.toml" data-wasm-opt="0" />
+  </head>
+  <body>
+    <!-- Marker div: `start()` mounts here for standalone dev only; when the
+         build is embedded in tptsolutions.co.nz/tools the hub runner calls
+         `mount(container)` itself and this file is never served. -->
+    <div id="tpt-appfront-root"></div>
+  </body>
+</html>

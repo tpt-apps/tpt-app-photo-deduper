@@ -1,0 +1,27 @@
+[package]
+name = "tpt-photo-dedupe"
+version = "0.1.0"
+edition = "2021"
+description = "Photo duplicate detection engine: SHA-256 exact-duplicate grouping plus perceptual dHash near-duplicate grouping over a Hamming threshold. Pure Rust, no UI deps."
+publish = false
+
+[features]
+default = []
+# Image-decode convenience (`phash_from_bytes`) for the native desktop scan
+# and host tests. The WASM app feeds canvas pixels to `dhash_from_gray`
+# directly instead, which keeps the browser bundle free of image decoders.
+phash = ["dep:image"]
+
+[dependencies]
+sha2 = "0.10"
+image = { version = "0.25", optional = true, default-features = false, features = [
+    "jpeg",
+    "png",
+    "gif",
+    "webp",
+    "bmp",
+    "tiff",
+] }
+
+[dev-dependencies]
+image = { version = "0.25", default-features = false, features = ["jpeg", "png"] }

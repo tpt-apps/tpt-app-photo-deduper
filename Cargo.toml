@@ -1,0 +1,70 @@
+[package]
+name = "tpt-app-photo-deduper"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[workspace]
+members = [".", "engine", "desktop"]
+resolver = "2"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
+# Pro edition (paid desktop build): perceptual near-duplicate grouping,
+# whole-drive scanning through the native bridge, side-by-side comparison,
+# and batch delete. The free WASM build compiles without it — default
+# features are free, `--features pro` is Pro.
+pro = ["dep:serde_json"]
+
+[dependencies]
+tpt-appfront-core = { path = "D:/Programming/1PRODUCTION/Open Source/tpt-appfront/crates/tpt-appfront-core" }
+tpt-appfront-dom = { path = "D:/Programming/1PRODUCTION/Open Source/tpt-appfront/crates/tpt-appfront-dom" }
+tpt-photo-dedupe = { path = "engine" }
+# IPC payloads to/from the desktop bridge (pro build only).
+serde_json = { version = "1", optional = true }
+# Pinned to the installed wasm-bindgen CLI version — the CLI rejects wasm
+# built against a different schema version. Bump both together.
+wasm-bindgen = "=0.2.128"
+wasm-bindgen-futures = "0.4"
+js-sys = "0.3"
+web-sys = { version = "0.3", features = [
+    "Document",
+    "Window",
+    "Element",
+    "Node",
+    "HtmlElement",
+    "HtmlInputElement",
+    "HtmlHeadElement",
+    # Near-duplicate hashing feeds a 9x8 canvas from an ImageBitmap so the
+    # browser's own decoders do the JPEG/PNG work — no decoders in the wasm.
+    "HtmlCanvasElement",
+    "CanvasRenderingContext2d",
+    "ImageData",
+    "ImageBitmap",
+    # Folder picker (hidden input[webkitdirectory]) + File metadata reads.
+    "Blob",
+    "File",
+    "FileList",
+    # Thumbnail object URLs.
+    "Url",
+    # Upsell counter + threshold persistence.
+    "Storage",
+    "EventTarget",
+    "Event",
+] }
+console_error_panic_hook = "0.1"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+# The desktop shell is a native binary; keep its codegen normal even in the
+# same workspace (the `release` profile above applies to the wasm lib build).
+[profile.release.package.tpt-photo-deduper-desktop]
+opt-level = 3

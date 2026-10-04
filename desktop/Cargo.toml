@@ -1,0 +1,24 @@
+[package]
+name = "tpt-photo-deduper-desktop"
+version = "0.1.0"
+edition = "2021"
+description = "TPT Photo Deduper Pro - desktop webview shell hosting the appfront DOM bundle, with native folder scan + delete over the IPC bridge."
+publish = false
+
+[[bin]]
+name = "tpt-photo-deduper-pro"
+path = "src/main.rs"
+
+[dependencies]
+tpt-appfront-webview = { path = "D:/Programming/1PRODUCTION/Open Source/tpt-appfront/crates/tpt-appfront-webview" }
+# The native scan runs the same engine as the wasm build, with image
+# decoding enabled for perceptual hashes and thumbnails.
+tpt-photo-dedupe = { path = "../engine", features = ["phash"] }
+# Direct decode/thumbnail support for the native scan (matches the engine's
+# phash feature set so the two unify to one build).
+image = { version = "0.25", default-features = false, features = [
+    "jpeg", "png", "gif", "webp", "bmp", "tiff",
+] }
+serde_json = "1"
+base64 = "0.22"
+trash = "5"
